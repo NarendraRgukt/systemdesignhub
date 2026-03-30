@@ -1,0 +1,34 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 99px;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: default;
+  white-space: nowrap;
+}
+
+button.tag {
+  cursor: pointer;
+}
+
+button.tag:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.tag-active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+[data-theme='dark'] .tag-active {
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+}
