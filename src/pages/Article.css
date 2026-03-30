@@ -1,163 +1,211 @@
-.article-page {
-  padding: 2rem 0 5rem;
+.article-layout-container {
+  display: flex;
+  min-height: calc(100vh - 73px);
+  background-color: var(--bg-primary);
 }
 
-.article-nav {
-  margin-bottom: 3rem;
-  display: flex;
-  align-items: center;
+.article-main-content {
+  flex-grow: 1;
+  padding: 2.5rem 3.5rem;
+  overflow-y: auto;
 }
 
-.back-link {
+.article-inner-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header Styles */
+.article-header {
+  margin-bottom: 2.5rem;
+}
+
+.article-status-container {
+  margin-bottom: 1rem;
+}
+
+/* Lozenges (Status badges) */
+.lozenge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lozenge-success { background-color: #e3fcef; color: #006644; }
+.lozenge-warning { background-color: #fff0b3; color: #172b4d; }
+.lozenge-default { background-color: #f4f5f7; color: #42526e; }
+
+[data-theme='dark'] .lozenge-success { background-color: #0747a622; color: #36b37e; border: 1px solid #36b37e44; }
+[data-theme='dark'] .lozenge-warning { background-color: #ffab0022; color: #ffab00; border: 1px solid #ffab0044; }
+[data-theme='dark'] .lozenge-default { background-color: #f4f5f711; color: #a5adba; border: 1px solid #ffffff11; }
+
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+/* Confluence Meta */
+.confluence-meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.meta-avatar {
+  background-color: #0052cc;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.meta-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.author-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-secondary);
-  transition: color 0.2s ease;
-}
-
-.back-link:hover {
   color: var(--accent-color);
 }
 
-.article-header {
-  max-width: 800px;
-  margin-bottom: 3rem;
-}
-
-.article-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  margin-bottom: 2rem;
-  line-height: 1.1;
-  color: var(--text-primary);
-}
-
-.article-meta {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
+.last-updated {
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
 }
 
-.meta-group {
+.header-actions {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
-.icon-btn {
+.icon-btn-ghost {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
   cursor: pointer;
   padding: 0.5rem;
-  margin-left: auto;
+  color: var(--text-secondary);
+  border-radius: 4px;
   transition: all 0.2s ease;
-  border-radius: 50%;
 }
 
-.icon-btn:hover {
+.icon-btn-ghost:hover {
   background-color: var(--bg-secondary);
   color: var(--accent-color);
 }
 
-.article-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
-}
-
+/* Article Page Actions */
 .article-actions {
-  margin-top: 1.5rem;
   display: flex;
   gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.pdf-viewer-container {
-  border-radius: 12px;
-  overflow: hidden;
+.confluence-primary-btn {
+  background-color: #0052cc;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confluence-primary-btn:hover {
+  background-color: #0747a6;
+}
+
+.confluence-secondary-btn {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   border: 1px solid var(--border-color);
-  background-color: var(--card-bg);
-  box-shadow: var(--card-shadow);
-  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confluence-secondary-btn:hover {
+  border-color: var(--accent-color);
+  background-color: var(--border-color);
+}
+
+/* PDF Viewer Enhancements */
+.pdf-viewer-container {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
 }
 
 .pdf-viewer-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  margin-bottom: 1rem;
+  background-color: #f4f5f7;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .pdf-viewer-wrapper {
+  background-color: #1a1a1a;
 }
 
 .pdf-iframe {
   width: 100%;
-  height: 100%;
+  height: 800px; /* Tall for readability */
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.pdf-footer-note {
-  font-size: 0.8rem;
+/* Footer Meta */
+.article-footer-meta {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  text-align: center;
-  font-style: italic;
-}
-
-/* Skeleton Loading Styles */
-.skeleton-container {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  justify-content: space-between;
 }
 
-.skeleton {
-  background: var(--skeleton-base);
-  background: linear-gradient(
-    90deg,
-    var(--skeleton-base) 25%,
-    var(--skeleton-highlight) 50%,
-    var(--skeleton-base) 75%
-  );
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 8px;
+.article-footer-meta a {
+  color: var(--accent-color);
+  text-decoration: none;
 }
 
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.article-footer-meta a:hover {
+  text-decoration: underline;
 }
 
-.title-skeleton { height: 50px; width: 80%; }
-.tags-skeleton { height: 30px; width: 40%; }
-.iframe-skeleton { height: 500px; width: 100%; }
-
-@media (max-width: 640px) {
-  .article-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .article-meta {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .article-tags {
-    justify-content: center;
-  }
-  
-  .article-actions {
-    justify-content: center;
-  }
-  
-  .pdf-viewer-wrapper {
-    aspect-ratio: 3 / 4; /* Better for mobile */
+@media (max-width: 900px) {
+  .article-main-content {
+    padding: 1.5rem;
   }
 }

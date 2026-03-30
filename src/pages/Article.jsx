@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ExternalLink, Download, Clock, Share2 } from 'lucide-react';
+import { ChevronLeft, ExternalLink, Download, Clock, Share2, MoreVertical, MessageSquare } from 'lucide-react';
 import articlesData from '../data/articles.json';
 import Tag from '../components/Tag';
+import Sidebar from '../components/Sidebar';
+import Breadcrumbs from '../components/Breadcrumbs';
 import './Article.css';
 
 const Article = () => {
@@ -11,14 +13,13 @@ const Article = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
     setLoading(true);
     const foundArticle = articlesData.find(a => a.id === id);
     setArticle(foundArticle);
     
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 600);
 
     return () => clearTimeout(timer);
   }, [id]);
@@ -26,8 +27,8 @@ const Article = () => {
   if (!article && !loading) {
     return (
       <div className="container status-empty page-transition">
-        <h2 className="hero-title">Article Not Found</h2>
-        <p className="hero-subtitle">The article you're looking for doesn't exist or has been moved.</p>
+        <h2 className="hero-title">Page Not Found</h2>
+        <p className="hero-subtitle">The page you're looking for doesn't exist or has been moved.</p>
         <Link to="/" className="btn btn-primary">
           <ChevronLeft size={20} />
           Back to Home
@@ -36,78 +37,104 @@ const Article = () => {
     );
   }
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'VERIFIED': return 'lozenge-success';
+      case 'IN REVIEW': return 'lozenge-warning';
+      case 'DRAFT': return 'lozenge-default';
+      default: return 'lozenge-default';
+    }
+  };
+
   return (
-    <div className="article-page page-transition">
-      <div className="container">
-        <nav className="article-nav">
-          <Link to="/" className="back-link">
-            <ChevronLeft size={20} />
-            Back to Articles
-          </Link>
-        </nav>
+    <div className="article-layout-container">
+      <Sidebar />
+      
+      <main className="article-main-content page-transition">
+        <div className="article-inner-container">
+          <Breadcrumbs currentArticle={article?.title} />
 
-        {loading ? (
-          <div className="skeleton-container">
-            <div className="skeleton title-skeleton"></div>
-            <div className="skeleton tags-skeleton"></div>
-            <div className="skeleton iframe-skeleton"></div>
-          </div>
-        ) : (
-          <div className="article-content">
-            <header className="article-header">
-              <h1 className="article-title">{article.title}</h1>
-              <div className="article-meta">
-                <div className="meta-group">
-                  <Clock size={16} />
-                  <span>12 min read</span>
-                </div>
-                <div className="meta-group">
-                  <Download size={16} />
-                  <span>2.4 MB</span>
-                </div>
-                <button className="icon-btn" aria-label="Share">
-                  <Share2 size={18} />
-                </button>
-              </div>
-              <div className="article-tags">
-                {article.tags.map(tag => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </div>
-              
-              <div className="article-actions">
-                <a 
-                  href={article.fileUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="btn btn-primary"
-                >
-                  <ExternalLink size={18} />
-                  Open PDF in New Tab
-                </a>
-              </div>
-            </header>
-
-            <div className="pdf-viewer-container">
-              <div className="pdf-viewer-wrapper">
-                <iframe 
-                  src={article.fileUrl} 
-                  title={article.title}
-                  className="pdf-iframe"
-                  onLoad={() => console.log('PDF loaded')}
-                >
-                  This browser does not support PDFs. 
-                  Please download the PDF to view it: 
-                  <a href={article.fileUrl}>Download PDF</a>.
-                </iframe>
-              </div>
-              <p className="pdf-footer-note">
-                Note: Some browsers might block embedded PDFs. If nothing appears, use the "Open PDF in New Tab" button.
-              </p>
+          {loading ? (
+            <div className="skeleton-container">
+              <div className="skeleton title-skeleton"></div>
+              <div className="skeleton meta-skeleton"></div>
+              <div className="skeleton iframe-skeleton"></div>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="article-content">
+              <header className="article-header">
+                <div className="article-status-container">
+                  <span className={`lozenge ${getStatusColor(article.status)}`}>
+                    {article.status}
+                  </span>
+                </div>
+                
+                <h1 className="article-title">{article.title}</h1>
+                
+                <div className="confluence-meta">
+                  <div className="meta-avatar">
+                    {article.author.charAt(0)}
+                  </div>
+                  <div className="meta-info">
+                    <span className="author-name">Created by {article.author}</span>
+                    <span className="last-updated">Last updated {article.lastUpdated} • <Clock size={12} style={{marginRight: 4}} /> 12 min read</span>
+                  </div>
+                  
+                  <div className="header-actions">
+                    <button className="icon-btn-ghost"><Share2 size={18} /></button>
+                    <button className="icon-btn-ghost"><MessageSquare size={18} /></button>
+                    <button className="icon-btn-ghost"><MoreVertical size={18} /></button>
+                  </div>
+                </div>
+
+                <div className="article-tags">
+                  {article.tags.map(tag => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))}
+                </div>
+                
+                <div className="article-actions">
+                  <a 
+                    href={article.fileUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="confluence-primary-btn"
+                  >
+                    <ExternalLink size={18} />
+                    Open PDF in New Tab
+                  </a>
+                  <a 
+                    href={article.fileUrl} 
+                    download
+                    className="confluence-secondary-btn"
+                  >
+                    <Download size={18} />
+                    Download
+                  </a>
+                </div>
+              </header>
+
+              <div className="pdf-viewer-container">
+                <div className="pdf-viewer-wrapper">
+                  <iframe 
+                    src={article.fileUrl} 
+                    title={article.title}
+                    className="pdf-iframe"
+                  >
+                    Your browser doesn't support PDFs. 
+                    <a href={article.fileUrl}>Download it here</a>.
+                  </iframe>
+                </div>
+              </div>
+
+              <footer className="article-footer-meta">
+                <p>Did this page help you? <a href="#">Send Feedback</a></p>
+                <div className="view-count">842 views • 12 reactions</div>
+              </footer>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
