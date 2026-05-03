@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, ExternalLink, Download, Clock, Share2, MoreVertical, MessageSquare } from 'lucide-react';
-import articlesData from '../data/articles.json';
+import { ChevronLeft, Clock, Share2, MoreVertical, MessageSquare } from 'lucide-react';
 import Tag from '../components/Tag';
+
+const mdxModules = import.meta.glob('../../content/system-design/*.mdx');
 import Sidebar from '../components/Sidebar';
 import Breadcrumbs from '../components/Breadcrumbs';
 import './Article.css';
@@ -10,18 +11,29 @@ import './Article.css';
 const Article = () => {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
+  const [MDXComponent, setMDXComponent] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    const foundArticle = articlesData.find(a => a.id === id);
-    setArticle(foundArticle);
+    const modulePath = Object.keys(mdxModules).find(path => path.includes(`/${id}.mdx`));
     
-    const timer = setTimeout(() => {
+    if (modulePath) {
+      const loadModule = mdxModules[modulePath];
+      loadModule().then((module) => {
+        setArticle(module.meta);
+        // We set the component wrapped in a function because useState treats functions as initializers
+        setMDXComponent(() => module.default);
+        setLoading(false);
+      }).catch(err => {
+        console.error("Failed to load MDX", err);
+        setArticle(null);
+        setLoading(false);
+      });
+    } else {
+      setArticle(null);
       setLoading(false);
-    }, 600);
-
-    return () => clearTimeout(timer);
+    }
   }, [id]);
 
   if (!article && !loading) {
@@ -92,39 +104,10 @@ const Article = () => {
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </div>
-                
-                <div className="article-actions">
-                  <a 
-                    href={article.fileUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="confluence-primary-btn"
-                  >
-                    <ExternalLink size={18} />
-                    Open PDF in New Tab
-                  </a>
-                  <a 
-                    href={article.fileUrl} 
-                    download
-                    className="confluence-secondary-btn"
-                  >
-                    <Download size={18} />
-                    Download
-                  </a>
-                </div>
               </header>
 
-              <div className="pdf-viewer-container">
-                <div className="pdf-viewer-wrapper">
-                  <iframe 
-                    src={article.fileUrl} 
-                    title={article.title}
-                    className="pdf-iframe"
-                  >
-                    Your browser doesn't support PDFs. 
-                    <a href={article.fileUrl}>Download it here</a>.
-                  </iframe>
-                </div>
+              <div className="mdx-content-container">
+                {MDXComponent && <MDXComponent />}
               </div>
 
               <footer className="article-footer-meta">

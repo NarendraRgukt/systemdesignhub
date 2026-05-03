@@ -1,0 +1,57 @@
+export const meta = {
+  id: "caching-strategies",
+  title: "Modern Caching Strategies",
+  description: "Deep dive into Write-through, Write-back, and Cache-aside patterns for high-performance systems.",
+  tags: ["performance", "backend", "caching"],
+  author: "System Architect",
+  lastUpdated: "2026-04-28",
+  status: "IN REVIEW"
+};
+
+# Modern Caching Strategies
+
+Caching is the process of storing copies of data in a temporary storage location, or cache, so that they can be accessed faster. When designing high-performance systems, choosing the right caching strategy is crucial.
+
+## The Cache Aside Pattern
+
+This is the most commonly used caching pattern. The application code is responsible for checking the cache, and if it's a miss, fetching the data from the database and populating the cache.
+
+```javascript
+async function getUser(id) {
+  let user = await cache.get(id);
+  if (!user) {
+    user = await database.get(id);
+    await cache.set(id, user);
+  }
+  return user;
+}
+```
+
+**Pros:** Simplest to implement. The cache contains only the data that is actually requested.
+**Cons:** Each cache miss results in three trips (check cache, query db, write to cache), which can be slow.
+
+## Write-Through Cache
+
+In this strategy, data is written to the cache and the backing store at the same time. The application only interacts with the cache.
+
+**Pros:** The cache is always up-to-date. Reads are always fast.
+**Cons:** Writes are slower because they have to be written to two places.
+
+## Write-Behind (Write-Back) Cache
+
+Here, data is written to the cache first, and the client receives a success response immediately. The cache then asynchronously writes the data to the backing database.
+
+**Pros:** Extremely fast write performance.
+**Cons:** Risk of data loss if the cache server crashes before the data is persisted to the database. More complex to implement.
+
+## Cache Eviction Policies
+
+When the cache is full, we need a strategy to decide which data to evict to make room for new data.
+
+- **LRU (Least Recently Used):** Evicts the data that hasn't been accessed for the longest time.
+- **LFU (Least Frequently Used):** Evicts the data that is accessed least often.
+- **FIFO (First In First Out):** Evicts the oldest data in the cache.
+
+## Conclusion
+
+Caching is a powerful tool for improving system performance, but it introduces complexity (cache invalidation is famously hard). By understanding these strategies, you can make informed decisions about how to best utilize caching in your architecture.

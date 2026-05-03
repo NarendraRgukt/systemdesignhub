@@ -1,0 +1,46 @@
+export const meta = {
+  id: "rate-limiter",
+  title: "Design a Rate Limiter",
+  description: "Learn how to build a scalable rate limiting service to protect your APIs from being overwhelmed.",
+  tags: ["scalability", "api", "security"],
+  author: "Narendra R.",
+  lastUpdated: "2026-05-02",
+  status: "VERIFIED"
+};
+
+# Design a Rate Limiter
+
+A rate limiter is used to control the rate of traffic sent by a client or a service. In the HTTP world, a rate limiter limits the number of client requests allowed to be sent over a specified period. If the API request count exceeds the threshold defined by the rate limiter, all the excess calls are blocked.
+
+## Why use a rate limiter?
+
+* **Prevent resource starvation:** Protects your service from Denial of Service (DoS) attacks, whether intentional or accidental.
+* **Cost control:** Many third-party APIs charge per request. Rate limiting helps you stay within your budget.
+* **Fairness:** Ensures that a small number of users cannot consume all available resources, leaving others with degraded service.
+
+## Algorithms for Rate Limiting
+
+There are several popular algorithms for rate limiting:
+
+### 1. Token Bucket
+
+The token bucket algorithm is widely used. Imagine a bucket that holds a certain number of tokens. Tokens are added to the bucket at a fixed rate. When a request comes in, a token is removed from the bucket. If the bucket is empty, the request is dropped.
+
+### 2. Leaking Bucket
+
+The leaking bucket algorithm is similar to the token bucket, but requests are processed at a fixed rate. Imagine a bucket with a hole in the bottom. Water (requests) pours into the bucket, and it leaks out of the bottom at a constant rate. If the bucket overflows, requests are dropped.
+
+### 3. Fixed Window Counter
+
+The fixed window counter algorithm divides time into fixed windows (e.g., 1 minute). Each window has a counter. When a request comes in, the counter for the current window is incremented. If the counter exceeds the limit, the request is dropped.
+
+### 4. Sliding Window Log
+
+The sliding window log algorithm keeps a log of the timestamps of all recent requests. When a new request comes in, it removes timestamps older than the window size and then checks if the remaining count exceeds the limit.
+
+## Implementation Details
+
+When designing a distributed rate limiter, you typically use an in-memory cache like **Redis**. Redis offers atomic operations like `INCR` and `EXPIRE` which are perfectly suited for building rate limiting mechanisms across multiple application servers.
+
+## Conclusion
+Rate limiting is a fundamental building block for any robust API. Understanding the trade-offs of different algorithms helps in choosing the right strategy for your specific use case.

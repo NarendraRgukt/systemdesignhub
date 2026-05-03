@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import ArticleCard from '../components/ArticleCard';
 import Tag from '../components/Tag';
-import articlesData from '../data/articles.json';
 import './Home.css';
+
+const mdxModules = import.meta.glob('../../content/system-design/*.mdx', { eager: true });
+const articlesData = Object.values(mdxModules).map(module => module.meta).filter(Boolean);
 
 const Home = ({ searchQuery }) => {
   const [selectedTag, setSelectedTag] = useState(null);

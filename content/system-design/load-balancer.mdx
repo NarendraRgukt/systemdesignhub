@@ -1,0 +1,38 @@
+export const meta = {
+  id: "load-balancer",
+  title: "Design a Load Balancer",
+  description: "Learn how load balancers distribute traffic across multiple servers to improve reliability and performance.",
+  tags: ["scalability", "networking", "high availability"],
+  author: "Narendra R.",
+  lastUpdated: "2026-05-03",
+  status: "VERIFIED"
+};
+
+# Design a Load Balancer
+
+Load balancing is a core networking and scalability concept. It involves distributing incoming network traffic across a group of backend servers. This prevents any single server from becoming a single point of failure, improving the overall reliability and performance of your application.
+
+## Why Do We Need Load Balancers?
+
+Imagine a popular e-commerce website during a flash sale. Thousands of users are trying to access the site simultaneously. If all this traffic hits a single server, it will likely crash. A load balancer acts as the "traffic cop" sitting in front of your servers and routing client requests across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization.
+
+### Key Benefits:
+- **High Availability:** If a server goes down, the load balancer redirects traffic to the remaining online servers.
+- **Scalability:** You can easily add more servers to the resource pool as your traffic grows.
+- **Security:** They can protect against DDoS attacks by hiding the internal IP addresses of your backend servers.
+
+## Load Balancing Algorithms
+
+There are several algorithms used to determine how traffic should be distributed:
+
+1. **Round Robin:** Requests are distributed across the group of servers sequentially.
+2. **Least Connections:** A new request is sent to the server with the fewest current connections to clients.
+3. **IP Hash:** The IP address of the client is used to determine which server receives the request. This ensures that a client is consistently routed to the same server.
+
+## Hardware vs Software Load Balancers
+
+- **Hardware Load Balancers:** Dedicated appliances (e.g., F5 BIG-IP). They are very powerful and expensive.
+- **Software Load Balancers:** Software that runs on standard hardware (e.g., NGINX, HAProxy). They are flexible, cost-effective, and widely used in modern cloud architectures.
+
+## Conclusion
+Understanding load balancing is essential for building robust, scalable system architectures. Whether you choose a hardware or software solution, implementing a load balancer is a critical step in ensuring your application can handle high traffic loads gracefully.
